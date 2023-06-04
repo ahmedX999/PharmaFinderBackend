@@ -34,20 +34,23 @@ public class ZoneController {
 	@Autowired
 	CityService villeService;
 
-	@Operation(summary = "add new zone")
+	@Operation(summary = "Add a new zone")
 	@PostMapping("/save")
-	public ResponseEntity<?> save(@RequestParam("name") String nom, @RequestParam("cityId") int ville_id) {
-		try {
-			City myville = villeService.findById(ville_id);
-			Zone myzone = new Zone();
-			myzone.setName(nom);
-			myzone.setCity(myville);
-			zoneService.save(myzone);
-			return ResponseEntity.ok(myzone);
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
-	}
+	public ResponseEntity<?> save(@RequestParam("name") String name, @RequestParam("cityId") int cityId) {
+    try {
+        City city = villeService.findById(cityId);
+        
+        Zone zone = new Zone();
+        zone.setName(name);
+        zone.setCity(city);
+        
+        Zone savedZone = zoneService.save(zone);
+        return ResponseEntity.ok(savedZone);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+}
+
 
 	
 	
